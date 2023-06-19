@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-// import Img from "../images/1.jpg";
-// import Img2 from "../images/2.jpg";
+import { getSingleRoom } from "../fetch/apies";
 
 export default function Room() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [roomData, setRoomData] = useState();
+  useEffect(() => {
+    getSingleRoom(id).then((res) => {
+      setRoomData(res);
+    });
+  }, []);
+
   return (
     <>
       <div className="ml-32  mt-16">
-        <button className="flex gap-1 items-center font-semibold">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex gap-1 items-center font-semibold"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -28,15 +41,22 @@ export default function Room() {
       <div className="bg-white h-[450px] flex flex-col mx-32 p-4 mt-2 gap-8 ">
         <div className="flex">
           <div className="w-[310px] ">
-            <div>
-              <img src={"#"} className=" w-[290px] object-contain"></img>
-            </div>
+            {roomData && (
+              <div>
+                <img
+                  src={`${process.env.PUBLIC_URL}/assets/images/${roomData.image}`}
+                  className=" w-[290px] object-contain"
+                ></img>
+              </div>
+            )}
           </div>
           <div className=" w-4/6 flex flex-col justify-between  ">
             <div className="">
-              <p className="font-bold">Name: Express24</p>
-              <p className="text-sm">Type: focus </p>
-              <p className="text-sm">Capacity: 5</p>
+              <p className="font-bold">Name: {roomData && roomData.name}</p>
+              <p className="text-sm">Type: {roomData && roomData.type} </p>
+              <p className="text-sm">
+                Capacity: {roomData && roomData.capacity}
+              </p>
               <p className="text-sm">
                 Location: Mirzo Ulugbek district, Tashkent
               </p>
@@ -98,9 +118,9 @@ export default function Room() {
                 <path
                   d="M8 16V14M8 14V9V6.5H11L13 8.5L11.5 10.5H8V14ZM19 10.5C19 15.4706 14.9706 19.5 10 19.5C5.02944 19.5 1 15.4706 1 10.5C1 5.52944 5.02944 1.5 10 1.5C14.9706 1.5 19 5.52944 19 10.5Z"
                   stroke="#0F172A"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>{" "}
               Free parking

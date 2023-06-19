@@ -1,15 +1,18 @@
 import React from "react";
-
-// import Img from "../images/1.jpg";
-// import Img2 from "../images/2.jpg";
+import { useNavigate } from "react-router-dom";
 
 function Rooms({ rooms }) {
+  const navigate = useNavigate();
+  const navigateBtn = (e, id) => {
+    e.preventDefault();
+    navigate(`/rooms/${id}`);
+  };
   return (
     <>
       <div className="mt-28 mb-28 flex justify-center gap-4 flex-col ">
         {rooms &&
-          rooms.map((el) => (
-            <div className="bg-white h-54 flex mx-32 p-4  ">
+          rooms.map((el, index) => (
+            <div key={index} className="bg-white h-54 flex mx-32 p-4  ">
               <div className="w-[310px] ">
                 <div>
                   <img
@@ -31,7 +34,10 @@ function Rooms({ rooms }) {
                   </p>
                 </div>
                 <div className="">
-                  <button className=" bg-black   py-1 px-8 text-white text-base   font-semibold">
+                  <button
+                    onClick={(e) => navigateBtn(e, el.id)}
+                    className=" bg-black   py-1 px-8 text-white text-base   font-semibold"
+                  >
                     More
                   </button>
                 </div>
