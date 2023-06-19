@@ -1,7 +1,7 @@
 import React from "react";
 
-import Img from "../images/1.jpg";
-import Img2 from "../images/2.jpg";
+// import Img from "../images/1.jpg";
+// import Img2 from "../images/2.jpg";
 
 export default function Room() {
   return (
@@ -29,7 +29,7 @@ export default function Room() {
         <div className="flex">
           <div className="w-[310px] ">
             <div>
-              <img src={Img2} className=" w-[290px] object-contain"></img>
+              <img src={"#"} className=" w-[290px] object-contain"></img>
             </div>
           </div>
           <div className=" w-4/6 flex flex-col justify-between  ">
