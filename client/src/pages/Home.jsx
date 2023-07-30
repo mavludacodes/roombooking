@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Rooms from "./Rooms";
 import { getAllRooms, getFilteredRooms } from "../fetch/apies";
+import Input from "../components/common/Input";
 
 export default function Home() {
   const [rooms, setRooms] = useState();
@@ -29,32 +30,20 @@ export default function Home() {
           </p>
         </div>
         <div className="absolute bottom-[-25px] flex bg-cyan-800 gap-1 p-1 left-[10%] right-[10%]">
-          <div>
-            {/* <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <span class="text-gray-500 sm:text-sm">$</span>
-            </div> */}
-            <input
-              type="text"
-              name="price"
-              id="price"
-              className="block w-full  border-0 py-3.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder="0.00"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-            />
-          </div>
+          <Input
+            placeholder={"Search all rooms..."}
+            value={searchInput}
+            handleChange={setSearchInput}
+          />
 
           <div>
             {/* <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
               <span class="text-gray-500 sm:text-sm">$</span>
             </div> */}
-            <input
-              type="text"
-              name="type"
-              className="block w-full  border-0 py-3.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder="0.00"
+            <Input
+              placeholder={"Room type..."}
               value={typeInput}
-              onChange={(e) => setTypeInput(e.target.value)}
+              handleChange={setTypeInput}
             />
           </div>
 
