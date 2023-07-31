@@ -5,14 +5,15 @@ import Input from "../components/common/Input";
 
 export default function Home() {
   const [rooms, setRooms] = useState();
+  const [searchInput, setSearchInput] = useState("");
+  const [typeInput, setTypeInput] = useState("");
+  const [capacityInput, setCapacityInput] = useState("");
+
   useEffect(() => {
     getAllRooms().then((res) => {
       setRooms(res.results);
     });
   }, []);
-
-  const [searchInput, setSearchInput] = useState("");
-  const [typeInput, setTypeInput] = useState("");
 
   const searchBtn = (e) => {
     getFilteredRooms(searchInput, typeInput).then((res) => {
@@ -31,25 +32,27 @@ export default function Home() {
         </div>
         <div className="absolute bottom-[-25px] flex bg-cyan-800 gap-1 p-1 left-[10%] right-[10%]">
           <Input
+            type={"text"}
             placeholder={"Search all rooms..."}
             value={searchInput}
             handleChange={setSearchInput}
           />
-
-          <div>
-            {/* <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <span class="text-gray-500 sm:text-sm">$</span>
-            </div> */}
-            <Input
-              placeholder={"Room type..."}
-              value={typeInput}
-              handleChange={setTypeInput}
-            />
-          </div>
+          <Input
+            type={"text"}
+            placeholder={"Room type..."}
+            value={typeInput}
+            handleChange={setTypeInput}
+          />
+          <Input
+            type={"number"}
+            placeholder={"Capacity..."}
+            value={capacityInput}
+            handleChange={setCapacityInput}
+          />
 
           <div>
             <button
-              className=" bg-black   py-3 px-20 text-white text-lg font-medium "
+              className="bg-black py-3 px-20 text-white text-lg font-medium "
               onClick={(e) => searchBtn(e)}
             >
               Search
