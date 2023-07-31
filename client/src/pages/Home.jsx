@@ -16,7 +16,7 @@ export default function Home() {
   }, []);
 
   const searchBtn = (e) => {
-    getFilteredRooms(searchInput, typeInput).then((res) => {
+    getFilteredRooms(searchInput, typeInput, capacityInput).then((res) => {
       setRooms(res.results);
     });
   };

@@ -41,7 +41,23 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/rooms", (req, res) => {
-  if (req.query.type && req.query.search) {
+  if (req.query.type && req.query.search && req.query.capacity) {
+    console.log("111");
+    pool.query(
+      "SELECT * FROM rooms WHERE type = $1 AND name = $2 AND capacity = $3",
+      [req.query.type, req.query.search, req.query.capacity],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        res.send({
+          count: result.rows.length,
+          results: result.rows,
+        });
+      }
+    );
+  } else if (req.query.type && req.query.search && !req.query.capacity) {
+    console.log("110");
     pool.query(
       "SELECT * FROM rooms WHERE type = $1 AND name = $2",
       [req.query.type, req.query.search],
@@ -55,7 +71,23 @@ app.get("/api/rooms", (req, res) => {
         });
       }
     );
-  } else if (req.query.type) {
+  } else if (req.query.type && !req.query.search && req.query.capacity) {
+    console.log("101");
+    pool.query(
+      "SELECT * FROM rooms WHERE type = $1 AND capacity = $2",
+      [req.query.type, req.query.capacity],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        res.send({
+          count: result.rows.length,
+          results: result.rows,
+        });
+      }
+    );
+  } else if (req.query.type && !req.query.search && !req.query.capacity) {
+    console.log("100");
     pool.query(
       "SELECT * FROM rooms WHERE type = $1",
       [req.query.type],
@@ -69,7 +101,23 @@ app.get("/api/rooms", (req, res) => {
         });
       }
     );
-  } else if (req.query.search) {
+  } else if (!req.query.type && req.query.search && req.query.capacity) {
+    console.log("011");
+    pool.query(
+      "SELECT * FROM rooms WHERE name = $1 AND capacity = $2",
+      [req.query.search, req.query.capacity],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        res.send({
+          count: result.rows.length,
+          results: result.rows,
+        });
+      }
+    );
+  } else if (!req.query.type && req.query.search && !req.query.capacity) {
+    console.log("010");
     pool.query(
       "SELECT * FROM rooms WHERE name = $1",
       [req.query.search],
@@ -83,7 +131,23 @@ app.get("/api/rooms", (req, res) => {
         });
       }
     );
+  } else if (!req.query.type && !req.query.search && req.query.capacity) {
+    console.log("001");
+    pool.query(
+      "SELECT * FROM rooms WHERE capacity = $1",
+      [req.query.capacity],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        res.send({
+          count: result.rows.length,
+          results: result.rows,
+        });
+      }
+    );
   } else {
+    console.log("000");
     pool.query("SELECT * FROM rooms", (err, result) => {
       if (err) {
         console.log(err);
@@ -173,7 +237,7 @@ app.get("/api/rooms/:id/availability", (req, res) => {
   console.log(id);
   pool.query(
     `SELECT *
-     FROM reserved
+     FROM booked
      WHERE room_id = $1;
     `,
     [id],
