@@ -118,6 +118,79 @@ app.get("/api/rooms/:id", (req, res) => {
   );
 });
 
+app.post("/api/rooms/:id/book", (req, res) => {
+  const id = req.params.id;
+  let { resident, day, start, end } = req.body;
+  if (!resident || !day || !start || !end) {
+    res.status(400).send("Error");
+  } else {
+    pool.query(
+      `SELECT * FROM booked
+       WHERE room_id = $1`,
+      [id],
+      async (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+
+        if (result.rows.length > 0) {
+          let list = result.rows.filter((el) => {
+            if (
+              (day === el.day && start == el.start_time) ||
+              end == el.end_time
+            ) {
+              return el;
+            }
+          });
+          console.log(list);
+          if (list.length === 0) {
+            pool.query(
+              `INSERT INTO booked (day, start_time, end_time, room_id) 
+               VALUES ($1, $2, $3, $4)
+               RETURNING id`,
+              [day, start, end, Number(id)],
+              (err, r) => {
+                if (err) {
+                  console.log(err);
+                }
+                res.status(200).send("Ok");
+              }
+            );
+          } else {
+            res.status(410).send({
+              error: "uzr, siz tanlagan vaqtda xona band",
+            });
+          }
+        } else {
+        }
+      }
+    );
+  }
+});
+
+app.get("/api/rooms/:id/availability", (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  pool.query(
+    `SELECT *
+     FROM reserved
+     WHERE room_id = $1;
+    `,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      if (result.rows.length > 0) {
+        console.log(result.rows);
+        res.status(200).send(result.rows);
+      } else {
+        res.status(404).send({ error: "topilmadi" });
+      }
+    }
+  );
+});
+
 // app.get("*", (req, res) => {
 //   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 // });

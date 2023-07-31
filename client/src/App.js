@@ -1,27 +1,24 @@
-import logo from "./logo.svg";
+import { useState, useEffect } from "react";
+
+// import logo from "./logo.svg";
 import "./App.css";
 
 import Home from "./pages/Home";
 
 function App() {
+  // const [state, setState] = useState(0);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setState(20);
+  //   }, 2000);
+  // }, [state]);
+
   return (
     <div>
+      {/* <>hii</>
+      <p onClick={(e) => setState(state + 1)}>{state} hello</p> */}
       <Home />
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
     </div>
   );
 }

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Rooms from "./Rooms";
 import { getAllRooms, getFilteredRooms } from "../fetch/apies";
+import Input from "../components/common/Input";
 
 export default function Home() {
   const [rooms, setRooms] = useState();
+  const [searchInput, setSearchInput] = useState("");
+  const [typeInput, setTypeInput] = useState("");
+  const [capacityInput, setCapacityInput] = useState("");
+
   useEffect(() => {
     getAllRooms().then((res) => {
       setRooms(res.results);
     });
   }, []);
-
-  const [searchInput, setSearchInput] = useState("");
-  const [typeInput, setTypeInput] = useState("");
 
   const searchBtn = (e) => {
     getFilteredRooms(searchInput, typeInput).then((res) => {
@@ -29,38 +31,28 @@ export default function Home() {
           </p>
         </div>
         <div className="absolute bottom-[-25px] flex bg-cyan-800 gap-1 p-1 left-[10%] right-[10%]">
-          <div>
-            {/* <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <span class="text-gray-500 sm:text-sm">$</span>
-            </div> */}
-            <input
-              type="text"
-              name="price"
-              id="price"
-              className="block w-full  border-0 py-3.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder="0.00"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-            />
-          </div>
-
-          <div>
-            {/* <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <span class="text-gray-500 sm:text-sm">$</span>
-            </div> */}
-            <input
-              type="text"
-              name="type"
-              className="block w-full  border-0 py-3.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder="0.00"
-              value={typeInput}
-              onChange={(e) => setTypeInput(e.target.value)}
-            />
-          </div>
+          <Input
+            type={"text"}
+            placeholder={"Search all rooms..."}
+            value={searchInput}
+            handleChange={setSearchInput}
+          />
+          <Input
+            type={"text"}
+            placeholder={"Room type..."}
+            value={typeInput}
+            handleChange={setTypeInput}
+          />
+          <Input
+            type={"number"}
+            placeholder={"Capacity..."}
+            value={capacityInput}
+            handleChange={setCapacityInput}
+          />
 
           <div>
             <button
-              className=" bg-black   py-3 px-20 text-white text-lg font-medium "
+              className="bg-black py-3 px-20 text-white text-lg font-medium "
               onClick={(e) => searchBtn(e)}
             >
               Search
