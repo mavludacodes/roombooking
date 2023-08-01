@@ -184,6 +184,46 @@ app.get("/api/rooms/:id", (req, res) => {
 
 app.post("/api/rooms/:id/book", (req, res) => {
   const id = req.params.id;
+  let { day } = req.body;
+
+  if (!day) {
+    res.status(400).send("Error");
+  } else {
+    pool.query(
+      `SELECT * FROM booked
+       WHERE room_id = $1 AND day = $2`,
+      [id, day],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        if (result.rows.length === 0) {
+          pool.query(
+            `INSERT INTO booked (day, room_id) 
+             VALUES ($1, $2)
+             RETURNING id`,
+            [day, id],
+            (err, r) => {
+              if (err) {
+                console.log(err);
+              }
+              res.status(200).send({
+                message: "xona muvaffaqiyatli band qilindi",
+              });
+            }
+          );
+        } else {
+          res.status(410).send({
+            error: "uzr, siz tanlagan vaqtda xona band",
+          });
+        }
+      }
+    );
+  }
+});
+
+app.post("/api/rooms/:id/booktest", (req, res) => {
+  const id = req.params.id;
   let { resident, day, start, end } = req.body;
   if (!resident || !day || !start || !end) {
     res.status(400).send("Error");
@@ -232,9 +272,8 @@ app.post("/api/rooms/:id/book", (req, res) => {
   }
 });
 
-app.get("/api/rooms/:id/availability", (req, res) => {
+app.get("/api/rooms/:id/booked", (req, res) => {
   const id = req.params.id;
-  console.log(id);
   pool.query(
     `SELECT *
      FROM booked

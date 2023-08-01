@@ -1,21 +1,56 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Datepicker from "react-tailwindcss-datepicker";
 
 import Input from "../components/common/Input";
-import { getSingleRoom } from "../fetch/apies";
+import { getSingleRoom, postRoomBooking, getBookedRooms } from "../fetch/apies";
 
 export default function Room() {
   const { id } = useParams();
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const [roomData, setRoomData] = useState();
+  const [bookedDays, setBookedDays] = useState();
   useEffect(() => {
     getSingleRoom(id).then((res) => {
       setRoomData(res);
     });
+
+    getBookedRooms(id).then((res) => {
+      console.log(res);
+      let disabledDates = res.map((el) => ({
+        startDate: el.day,
+        endDate: el.day,
+      }));
+      console.log(disabledDates, "jjj");
+      setBookedDays(disabledDates);
+    });
   }, []);
 
   const [open, setOpen] = useState(false);
+
+  const currentMonth = new Date().getMonth();
+  const nextMonth = currentMonth + 1;
+  console.log(nextMonth);
+  const [value, setValue] = useState({
+    startDate: null,
+    endDate: null,
+  });
+
+  const handleValueChange = (newValue) => {
+    console.log("newValue:", newValue);
+    setValue(newValue);
+  };
+
+  const [nameInput, setNameInput] = useState();
+  const reserveBtn = (e) => {
+    e.preventDefault();
+    const data = {
+      day: value.startDate,
+    };
+
+    postRoomBooking(id, data).then((el) => console.log(el));
+  };
 
   return (
     <>
@@ -172,55 +207,51 @@ export default function Room() {
   --> */}
           <div className=" fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-          <div className="fixed inset-0 z-10 overflow-y-auto">
+          <div className="fixed inset-0 z-10 overflow-y-auto ">
             <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-              <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 ">
+              <div className="h-[600px] relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ">
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
-                    <div className="mt-3 text-center sm:ml-4 sm:mr-4 sm:mt-0 sm:text-left">
-                      <div className="mt-2 flex flex-col gap-4">
-                        <Input
-                          label={"Name:"}
-                          type={"text"}
-                          placeholder={"Your name"}
+                    <div className="w-full flex flex-col gap-6 mt-3 text-center sm:ml-4 sm:mr-4 sm:mt-0 sm:text-left">
+                      <Input
+                        label={"Name:"}
+                        type={"text"}
+                        placeholder={"Your name"}
+                        value={nameInput}
+                        handleChange={setNameInput}
+                      />
+                      <label>
+                        Date:
+                        <Datepicker
+                          asSingle={true}
+                          placeholder={"YYYY-MM-DD"}
+                          minDate={new Date()}
+                          maxDate={new Date().setMonth(nextMonth)}
+                          useRange={false}
+                          value={value}
+                          onChange={handleValueChange}
+                          popoverDirection="down"
+                          disabledDates={bookedDays}
                         />
-                        <Input
-                          label={"Date:"}
-                          type={"date"}
-                          placeholder={"Your name"}
-                        />
-
-                        <div className="flex gap-2">
-                          <Input
-                            label={"From:"}
-                            type={"time"}
-                            placeholder={"Your name"}
-                          />
-                          <span className="mt-8">-</span>
-                          <Input
-                            label={"To:"}
-                            type={"time"}
-                            placeholder={"Your name"}
-                          />
-                        </div>
+                      </label>
+                      <div className=" py-3 sm:flex sm:flex-row-reverse ">
+                        <button
+                          onClick={(e) => reserveBtn(e)}
+                          type="button"
+                          className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                        >
+                          Reserve
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setOpen(false)}
+                          className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                        >
+                          Cancel
+                        </button>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="border bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  <button
-                    type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                  >
-                    Reserve
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setOpen(false)}
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                  >
-                    Cancel
-                  </button>
                 </div>
               </div>
             </div>
