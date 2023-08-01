@@ -54,7 +54,7 @@ export default function Room() {
 
   return (
     <>
-      <div className="ml-32  mt-16">
+      <div className="ml-32 mt-16">
         <button
           onClick={() => navigate(-1)}
           className="flex gap-1 items-center font-semibold"
@@ -83,7 +83,7 @@ export default function Room() {
               <div>
                 <img
                   src={`${process.env.PUBLIC_URL}/assets/images/${roomData.image}`}
-                  className=" w-[290px] object-contain"
+                  className="w-[290px] h-[240px] object-cover"
                 ></img>
               </div>
             )}

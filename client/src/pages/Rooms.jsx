@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import RoomImage from "../components/common/Image";
 
 function Rooms({ rooms }) {
   const navigate = useNavigate();
@@ -9,20 +10,20 @@ function Rooms({ rooms }) {
   };
   return (
     <>
-      <div className="mt-28 mb-28 flex justify-center gap-4 flex-col ">
+      <div className="mt-40 md:mt-28 mb-28 flex justify-center gap-4 flex-col">
         {rooms &&
           rooms.map((el, index) => (
-            <div key={index} className="bg-white h-54 flex mx-32 p-4  ">
-              <div className="w-[310px] ">
-                <div>
-                  <img
-                    src={`${process.env.PUBLIC_URL}/assets/images/${el.image}`}
-                    className=" w-[290px] object-contain"
-                  ></img>
-                </div>
+            <div
+              key={index}
+              className="bg-white h-54 flex flex-col gap-3 sm:flex-row mx-4 lg:mx-32 p-4"
+            >
+              <div>
+                <RoomImage
+                  src={`${process.env.PUBLIC_URL}/assets/images/${el.image}`}
+                />
               </div>
-              <div className=" w-4/6 flex flex-col justify-between  ">
-                <div className="">
+              <div className=" sm:w-4/6 flex flex-col justify-between gap-3  ">
+                <div>
                   <p className="font-bold">Name: {el.name}</p>
                   <p className="text-sm">Type: {el.type} </p>
                   <p className="text-sm">Capacity: {el.capacity}</p>
@@ -33,7 +34,7 @@ function Rooms({ rooms }) {
                     similique vitae quis id quas amet? Facere?
                   </p>
                 </div>
-                <div className="">
+                <div>
                   <button
                     onClick={(e) => navigateBtn(e, el.id)}
                     className=" bg-black   py-1 px-8 text-white text-base   font-semibold"
