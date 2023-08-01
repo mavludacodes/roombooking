@@ -1,3 +1,5 @@
+import { json } from "react-router-dom";
+
 const getAllRooms = async () => {
   const req = await fetch(`${process.env.REACT_APP_BACKEND_API}/api/rooms`, {
     credentials: "same-origin",
@@ -49,4 +51,48 @@ const getSingleRoom = async (id) => {
   }
 };
 
-export { getAllRooms, getFilteredRooms, getSingleRoom };
+const postRoomBooking = async (id, data) => {
+  const req = await fetch(
+    `${process.env.REACT_APP_BACKEND_API}/api/rooms/${id}/book`,
+    {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json; charset= UTF-8",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  try {
+    const res = await req.json();
+    return res;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+const getBookedRooms = async (id) => {
+  const req = await fetch(
+    `${process.env.REACT_APP_BACKEND_API}/api/rooms/${id}/booked`,
+    {
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json; charset= UTF-8",
+      },
+    }
+  );
+  try {
+    const res = await req.json();
+    return res;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+export {
+  getAllRooms,
+  getFilteredRooms,
+  getSingleRoom,
+  postRoomBooking,
+  getBookedRooms,
+};
