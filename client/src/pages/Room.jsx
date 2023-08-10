@@ -17,8 +17,8 @@ export default function Room() {
     });
 
     getBookedRooms(id).then((res) => {
-      console.log(res);
-      let disabledDates = res.map((el) => ({
+      console.log(res, "kk");
+      let disabledDates = res?.map((el) => ({
         startDate: el.day,
         endDate: el.day,
       }));
