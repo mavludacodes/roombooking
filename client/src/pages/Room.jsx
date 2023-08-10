@@ -1,104 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import Datepicker from "react-tailwindcss-datepicker";
+import { useParams } from "react-router-dom";
 
-import Input from "../components/common/Input";
-import { getSingleRoom, postRoomBooking, getBookedRooms } from "../fetch/apies";
+import Booking from "./Booking";
+import RoomImage from "../components/common/Image";
+import BackButton from "../components/common/BackButton";
+import RoomDetails from "../components/room/RoomDetails";
+import RoomOverview from "../components/room/RoomOverview";
+import RoomFacilities from "../components/room/RoomFacilities";
+import { getSingleRoom } from "../fetch/apies";
 
 export default function Room() {
   const { id } = useParams();
 
-  const navigate = useNavigate();
   const [roomData, setRoomData] = useState();
-  const [bookedDays, setBookedDays] = useState();
+
   useEffect(() => {
     getSingleRoom(id).then((res) => {
       setRoomData(res);
-    });
-
-    getBookedRooms(id).then((res) => {
-      console.log(res, "kk");
-      let disabledDates = res?.map((el) => ({
-        startDate: el.day,
-        endDate: el.day,
-      }));
-      console.log(disabledDates, "jjj");
-      setBookedDays(disabledDates);
     });
   }, []);
 
   const [open, setOpen] = useState(false);
 
-  const currentMonth = new Date().getMonth();
-  const nextMonth = currentMonth + 1;
-  console.log(nextMonth);
-  const [value, setValue] = useState({
-    startDate: null,
-    endDate: null,
-  });
-
-  const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
-    setValue(newValue);
-  };
-
-  const [nameInput, setNameInput] = useState();
-  const reserveBtn = (e) => {
-    e.preventDefault();
-    const data = {
-      day: value.startDate,
-    };
-
-    postRoomBooking(id, data).then((el) => console.log(el));
-  };
-
   return (
     <>
-      <div className="ml-32 mt-16">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex gap-1 items-center font-semibold"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-4 h-4"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
-            />
-          </svg>
-          Back
-        </button>
+      <div className="ml-3 md:ml-16 lg:ml-32   mt-16">
+        <BackButton />
       </div>
-      <div className="bg-white h-[450px] flex flex-col mx-32 p-4 mt-2 gap-8 ">
-        <div className="flex">
-          <div className="w-[310px] ">
+      <div className="bg-white flex flex-col mx-3 md:mx-16 lg:mx-32 p-4 mt-2 gap-8  mb-16">
+        <div className="flex flex-col sm:flex-row gap-6 ">
+          <div>
             {roomData && (
               <div>
-                <img
+                <RoomImage
                   src={`${process.env.PUBLIC_URL}/assets/images/${roomData.image}`}
-                  className="w-[290px] h-[240px] object-cover"
-                ></img>
+                />
               </div>
             )}
           </div>
-          <div className=" w-4/6 flex flex-col justify-between  ">
-            <div className="">
-              <p className="font-bold">Name: {roomData && roomData.name}</p>
-              <p className="text-sm">Type: {roomData && roomData.type} </p>
-              <p className="text-sm">
-                Capacity: {roomData && roomData.capacity}
-              </p>
-              <p className="text-sm">
-                Location: Mirzo Ulugbek district, Tashkent
-              </p>
-            </div>
+          <div className="flex flex-col gap-y-3  sm:justify-between">
+            <RoomDetails roomData={roomData} />
             <div className="">
               <button
                 onClick={() => setOpen(true)}
@@ -109,155 +50,12 @@ export default function Room() {
             </div>
           </div>
         </div>
-        <div>
-          <p className="mb-2">Overview</p>
-          <hr />
-          <p className="text-sm font-light">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Praesentium ipsum labore sint assumenda cum, porro ratione accusamus
-            voluptatem magni tempore. Similique quod amet incidunt.
-            Reprehenderit dolorem iste optio rem. Dolores. Lorem ipsum dolor sit
-            amet consectetur adipisicing elit. Ex consectetur enim
-            exercitationem libero sunt, nobis dolore consequuntur odio,
-            consequatur neque sapiente aliquam accusantium maxime odit modi
-            placeat illo ratione necessitatibus? Lorem, ipsum dolor sit amet
-            consectetur adipisicing elit. Nesciunt, mollitia omnis! Odio quaerat
-            veritatis rem consectetur voluptates deserunt natus facere?
-            Cupiditate delectus doloribus, ipsum animi velit natus quidem ad
-            perferendis.
-          </p>
-          <p className="font-bold my-2 ">Most popular facilities</p>
-
-          <div className="flex gap-6">
-            <div className="flex gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z"
-                />
-              </svg>
-              Free WiFi
-            </div>
-
-            <div className="flex gap-2">
-              {" "}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="21"
-                viewBox="0 0 20 21"
-                fill="none"
-              >
-                <path
-                  d="M8 16V14M8 14V9V6.5H11L13 8.5L11.5 10.5H8V14ZM19 10.5C19 15.4706 14.9706 19.5 10 19.5C5.02944 19.5 1 15.4706 1 10.5C1 5.52944 5.02944 1.5 10 1.5C14.9706 1.5 19 5.52944 19 10.5Z"
-                  stroke="#0F172A"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>{" "}
-              Free parking
-            </div>
-            <div className="flex gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.125-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12.265 3.11a.375.375 0 11-.53 0L12 2.845l.265.265zm-3 0a.375.375 0 11-.53 0L9 2.845l.265.265zm6 0a.375.375 0 11-.53 0L15 2.845l.265.265z"
-                />
-              </svg>
-              Good Breakfast
-            </div>
-          </div>
-        </div>
+        <RoomOverview />
+        <RoomFacilities />
       </div>
 
       {/* Modal */}
-      {open && (
-        <div
-          className="relative z-10"
-          aria-labelledby="modal-title"
-          role="dialog"
-          aria-modal="true"
-        >
-          {/* <!--
-    Background backdrop, show/hide based on modal state.
-
-    Entering: "ease-out duration-300"
-      From: "opacity-0"
-      To: "opacity-100"
-    Leaving: "ease-in duration-200"
-      From: "opacity-100"
-      To: "opacity-0"
-  --> */}
-          <div className=" fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-
-          <div className="fixed inset-0 z-10 overflow-y-auto ">
-            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-              <div className="h-[600px] relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ">
-                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="w-full flex flex-col gap-6 mt-3 text-center sm:ml-4 sm:mr-4 sm:mt-0 sm:text-left">
-                      <Input
-                        label={"Name:"}
-                        type={"text"}
-                        placeholder={"Your name"}
-                        value={nameInput}
-                        handleChange={setNameInput}
-                      />
-                      <label>
-                        Date:
-                        <Datepicker
-                          asSingle={true}
-                          placeholder={"YYYY-MM-DD"}
-                          minDate={new Date()}
-                          maxDate={new Date().setMonth(nextMonth)}
-                          useRange={false}
-                          value={value}
-                          onChange={handleValueChange}
-                          popoverDirection="down"
-                          disabledDates={bookedDays}
-                        />
-                      </label>
-                      <div className=" py-3 sm:flex sm:flex-row-reverse ">
-                        <button
-                          onClick={(e) => reserveBtn(e)}
-                          type="button"
-                          className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                        >
-                          Reserve
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setOpen(false)}
-                          className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {open && <Booking roomId={id} setOpen={setOpen} />}
     </>
   );
 }
