@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import Booking from "./Booking";
+import Toast from "../components/common/Toast";
 import RoomImage from "../components/common/Image";
 import BackButton from "../components/common/BackButton";
 import RoomDetails from "../components/room/RoomDetails";
@@ -21,6 +22,7 @@ export default function Room() {
   }, []);
 
   const [open, setOpen] = useState(false);
+  const [openToast, setOpenToast] = useState(true);
 
   return (
     <>
@@ -55,7 +57,10 @@ export default function Room() {
       </div>
 
       {/* Modal */}
-      {open && <Booking roomId={id} setOpen={setOpen} />}
+      {open && (
+        <Booking roomId={id} setOpen={setOpen} setOpenToast={setOpenToast} />
+      )}
+      {openToast && <Toast setOpenToast={setOpenToast} />}
     </>
   );
 }
