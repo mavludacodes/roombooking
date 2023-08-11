@@ -7,6 +7,7 @@ import { postRoomBooking, getBookedRooms } from "../fetch/apies";
 function Booking({ roomId, setOpen }) {
   const [bookedDays, setBookedDays] = useState();
   const [disableBtn, setDisabledBtn] = useState(false);
+  const [validateInput, setValidateInput] = useState(false);
 
   useEffect(() => {
     getBookedRooms(roomId).then((res) => {
@@ -22,30 +23,34 @@ function Booking({ roomId, setOpen }) {
 
   const currentMonth = new Date().getMonth();
   const nextMonth = currentMonth + 1;
-  console.log(nextMonth);
+
   const [value, setValue] = useState({
     startDate: null,
     endDate: null,
   });
 
   const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
     setValue(newValue);
   };
 
-  const [nameInput, setNameInput] = useState();
+  const [nameInput, setNameInput] = useState("");
+
   const reserveBtn = (e) => {
     e.preventDefault();
-    setDisabledBtn(true);
-    const data = {
-      day: value.startDate,
-    };
+    if (nameInput === "" || value.startDate === null) {
+      setValidateInput(true);
+    } else {
+      setDisabledBtn(true);
+      const data = {
+        day: value.startDate,
+      };
 
-    postRoomBooking(roomId, data).then((el) => console.log(el));
-    setTimeout(() => {
-      setDisabledBtn(false);
-      setOpen(false);
-    }, 1000);
+      postRoomBooking(roomId, data).then((el) => console.log(el));
+      setTimeout(() => {
+        setDisabledBtn(false);
+        setOpen(false);
+      }, 1000);
+    }
   };
 
   return (
@@ -62,13 +67,20 @@ function Booking({ roomId, setOpen }) {
           <div className=" relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ">
             <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
               <div className="sm:flex sm:items-start">
-                <div className="w-full flex flex-col gap-6 mt-3  sm:ml-4 sm:mr-4 sm:mt-0 text-left font-light">
-                  <RoomInput
-                    label={"Name:"}
-                    placeholder={"Your name"}
-                    value={nameInput}
-                    handleChange={setNameInput}
-                  />
+                <div className="w-full flex flex-col gap-6  mt-3  sm:ml-4 sm:mr-4 sm:mt-0 text-left font-light">
+                  <div>
+                    <RoomInput
+                      label={"Name:"}
+                      placeholder={"Your name"}
+                      value={nameInput}
+                      handleChange={setNameInput}
+                    />
+                    {validateInput && nameInput === "" && (
+                      <p className="text-xs text-rose-400 pl-1 font-semibold">
+                        Please, fill out this field.
+                      </p>
+                    )}
+                  </div>
                   <label>
                     <p className="mb-1">Date:</p>
                     <Datepicker
@@ -82,6 +94,11 @@ function Booking({ roomId, setOpen }) {
                       popoverDirection="down"
                       disabledDates={bookedDays}
                     />
+                    {validateInput && value.startDate === null && (
+                      <p className="text-xs text-rose-400 pl-1 font-semibold">
+                        Please, fill out this field.
+                      </p>
+                    )}
                   </label>
                   <div className=" py-3 sm:flex sm:flex-row-reverse ">
                     {disableBtn ? (
