@@ -22,7 +22,7 @@ export default function Room() {
   }, []);
 
   const [open, setOpen] = useState(false);
-  const [openToast, setOpenToast] = useState(true);
+  const [openToast, setOpenToast] = useState(false);
 
   return (
     <>
