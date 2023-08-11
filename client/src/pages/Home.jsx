@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import Rooms from "./Rooms";
 import { getAllRooms, getFilteredRooms } from "../fetch/apies";
 import Input from "../components/common/Input";
-import RoomImage from "../components/common/Image";
-
+import NotFoundRooms from "../components/room/NotFoundRooms";
+import Loader from "../components/room/Loader";
 export default function Home() {
   const [rooms, setRooms] = useState();
   const [searchInput, setSearchInput] = useState("");
   const [typeInput, setTypeInput] = useState("");
   const [capacityInput, setCapacityInput] = useState("");
+
+  const [startLoading, setLoading] = useState(false);
 
   useEffect(() => {
     getAllRooms().then((res) => {
@@ -17,7 +19,11 @@ export default function Home() {
   }, []);
 
   const searchBtn = (e) => {
+    setLoading(true);
     getFilteredRooms(searchInput, typeInput, capacityInput).then((res) => {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
       setRooms(res.results);
     });
   };
@@ -25,7 +31,7 @@ export default function Home() {
   return (
     <>
       <div className="relative h-96  bg-cyan-500 ">
-        <div className="absolute left-3 md:left-[10%] bottom-[140px] md:bottom-[80px]">
+        <div className="absolute left-[3%] right-[3%] md:left-[2%] lg:left-[10%] lg:right-[10%] bottom-[140px] md:bottom-[80px]">
           <p className="text-4xl  md:text-5xl font-bold text-white ">
             Find your next stay
           </p>
@@ -33,7 +39,7 @@ export default function Home() {
             Search deals on hotels, homes, and much more...
           </p>
         </div>
-        <div className="absolute bottom-[-140px] md:bottom-[-25px]  flex flex-col  w-[95%]  md:w-auto  md:flex-row  bg-cyan-800 gap-1 p-1 left-[2%] right-[2%] lg:left-[10%] lg:right-[10%]">
+        <div className="absolute bottom-[-140px] md:bottom-[-25px]  flex flex-col   md:w-auto  md:flex-row  bg-cyan-800 gap-1 p-1 left-[2%] right-[2%] lg:left-[10%] lg:right-[10%]">
           <Input
             type={"text"}
             placeholder={"Search all rooms..."}
@@ -63,7 +69,14 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Rooms rooms={rooms} />
+
+      {startLoading ? (
+        <Loader />
+      ) : rooms?.length != 0 ? (
+        <Rooms rooms={rooms} />
+      ) : (
+        <NotFoundRooms />
+      )}
     </>
   );
 }
