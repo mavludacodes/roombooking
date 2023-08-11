@@ -4,7 +4,7 @@ import RoomInput from "../components/room/RoomInput";
 import LoaderBtn from "../components/common/LoaderBtn";
 import { postRoomBooking, getBookedRooms } from "../fetch/apies";
 
-function Booking({ roomId, setOpen }) {
+function Booking({ roomId, setOpen, setOpenToast }) {
   const [bookedDays, setBookedDays] = useState();
   const [disableBtn, setDisabledBtn] = useState(false);
   const [validateInput, setValidateInput] = useState(false);
@@ -50,6 +50,14 @@ function Booking({ roomId, setOpen }) {
         setDisabledBtn(false);
         setOpen(false);
       }, 1000);
+
+      setTimeout(() => {
+        setOpenToast(true);
+      }, 2000);
+
+      setTimeout(() => {
+        setOpenToast(false);
+      }, 5000);
     }
   };
 
@@ -63,8 +71,8 @@ function Booking({ roomId, setOpen }) {
       <div className=" fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
       <div className="fixed inset-0 z-10 overflow-y-auto ">
-        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-          <div className=" relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ">
+        <div className="flex  min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ">
             <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
               <div className="sm:flex sm:items-start">
                 <div className="w-full flex flex-col gap-6  mt-3  sm:ml-4 sm:mr-4 sm:mt-0 text-left font-light">
