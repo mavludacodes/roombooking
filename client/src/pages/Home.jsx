@@ -72,7 +72,7 @@ export default function Home() {
 
       {startLoading ? (
         <Loader />
-      ) : rooms?.length != 0 ? (
+      ) : rooms?.length !== 0 ? (
         <Rooms rooms={rooms} />
       ) : (
         <NotFoundRooms />

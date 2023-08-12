@@ -19,7 +19,7 @@ export default function Room() {
     getSingleRoom(id).then((res) => {
       setRoomData(res);
     });
-  }, []);
+  }, [id]);
 
   const [open, setOpen] = useState(false);
   const [openToast, setOpenToast] = useState(false);

@@ -82,7 +82,7 @@ const getBookedRooms = async (id) => {
   try {
     const res = await req.json();
 
-    if (res.error == "topilmadi") {
+    if (res.error === "topilmadi") {
       throw new TypeError("oops");
     }
     return res;
