@@ -1,5 +1,3 @@
-import { json } from "react-router-dom";
-
 const getAllRooms = async () => {
   const req = await fetch(`${process.env.REACT_APP_BACKEND_API}/api/rooms`, {
     credentials: "same-origin",
