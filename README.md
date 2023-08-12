@@ -2,7 +2,7 @@
 
 Demo:
 
-Used language and tools:
+Used languages and tools:
 
 - JavaScript
 - React.js
