@@ -19,7 +19,7 @@ function Booking({ roomId, setOpen, setOpenToast }) {
       console.log(disabledDates, "jjj");
       setBookedDays(disabledDates);
     });
-  }, []);
+  }, [roomId]);
 
   const currentMonth = new Date().getMonth();
   const nextMonth = currentMonth + 1;
