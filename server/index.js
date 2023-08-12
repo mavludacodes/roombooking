@@ -40,6 +40,10 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.get("/api/test", (req, res) => {
+  res.send("Hello World!");
+});
+
 app.get("/api/rooms", (req, res) => {
   if (req.query.type && req.query.search && req.query.capacity) {
     console.log("111");
