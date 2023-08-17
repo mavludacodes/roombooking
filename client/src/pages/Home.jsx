@@ -39,7 +39,7 @@ export default function Home() {
             Search deals on hotels, homes, and much more...
           </p>
         </div>
-        <div className="absolute bottom-[-140px] md:bottom-[-25px]  flex flex-col   md:w-auto  md:flex-row  bg-cyan-800 gap-1 p-1 left-[2%] right-[2%] lg:left-[10%] lg:right-[10%]">
+        <div className="absolute bottom-[-140px] md:bottom-[-25px] grid md:grid-cols-4 bg-cyan-800 gap-1 p-1 left-[2%] right-[2%] lg:left-[10%] lg:right-[10%]">
           <Input
             type={"text"}
             placeholder={"Search all rooms..."}
@@ -59,14 +59,12 @@ export default function Home() {
             handleChange={setCapacityInput}
           />
 
-          <div className="w-full md:w-auto">
-            <button
-              className="w-full md:w-auto bg-black py-3 px-20 text-white text-lg font-medium "
-              onClick={(e) => searchBtn(e)}
-            >
-              Search
-            </button>
-          </div>
+          <button
+            className="bg-black py-3 text-white text-lg font-medium text-center"
+            onClick={(e) => searchBtn(e)}
+          >
+            Search
+          </button>
         </div>
       </div>
 
