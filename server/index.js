@@ -1,37 +1,28 @@
-const path = require("path");
+// const path = require("path");
 const express = require("express");
+const cors = require("cors");
 require("dotenv").config();
 const { pool } = require("../dbconfig");
 const app = express();
 
 const port = process.env.PORT || 8000;
 
-app.use(express.json());
-app.use(express.static(path.resolve(__dirname, "../client/build")));
+// app.use(express.static(path.resolve(__dirname, "../client/build")));
 
-app.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    `${process.env.FRONTEND_ORIGIN}`
-  );
+// CORS configuration
+const corsOptions = {
+  origin: `${process.env.FRONTEND_ORIGIN}`, // or your specific origin
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "Content-Type,Authorization",
+  credentials: true,
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
-  // Request methods you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,HEAD,PUT,PATCH,POST,DELETE"
-  );
+// Enable preflight requests for all routes
+app.options("*", cors(corsOptions));
 
-  // Request headers you wish to allow
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
-
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader("Access-Control-Allow-Credentials", true);
-
-  // Pass to next layer of middleware
-  next();
-});
+// Enable CORS for all responses
+app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
