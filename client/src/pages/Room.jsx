@@ -34,9 +34,7 @@ export default function Room() {
           <div>
             {roomData && (
               <div>
-                <RoomImage
-                  src={`${process.env.PUBLIC_URL}/assets/images/${roomData.image}`}
-                />
+                <RoomImage src={`/assets/images/${roomData.image}`} />
               </div>
             )}
           </div>

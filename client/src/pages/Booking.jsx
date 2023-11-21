@@ -8,15 +8,18 @@ function Booking({ roomId, setOpen, setOpenToast }) {
   const [bookedDays, setBookedDays] = useState();
   const [disableBtn, setDisabledBtn] = useState(false);
   const [validateInput, setValidateInput] = useState(false);
+  const [value, setValue] = useState({
+    startDate: null,
+    endDate: null,
+  });
+  const [nameInput, setNameInput] = useState("");
 
   useEffect(() => {
     getBookedRooms(roomId).then((res) => {
-      console.log(res, "kk");
       let disabledDates = res?.map((el) => ({
         startDate: el.day,
         endDate: el.day,
       }));
-      console.log(disabledDates, "jjj");
       setBookedDays(disabledDates);
     });
   }, [roomId]);
@@ -24,16 +27,9 @@ function Booking({ roomId, setOpen, setOpenToast }) {
   const currentMonth = new Date().getMonth();
   const nextMonth = currentMonth + 1;
 
-  const [value, setValue] = useState({
-    startDate: null,
-    endDate: null,
-  });
-
   const handleValueChange = (newValue) => {
     setValue(newValue);
   };
-
-  const [nameInput, setNameInput] = useState("");
 
   const reserveBtn = (e) => {
     e.preventDefault();
