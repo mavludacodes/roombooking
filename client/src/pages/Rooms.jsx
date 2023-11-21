@@ -18,9 +18,7 @@ function Rooms({ rooms }) {
               className="bg-white h-54 flex flex-col gap-3 sm:flex-row mx-4 lg:mx-32 p-4"
             >
               <div>
-                <RoomImage
-                  src={`${process.env.PUBLIC_URL}/assets/images/${el.image}`}
-                />
+                <RoomImage src={`/assets/images/${el.image}`} />
               </div>
               <div className=" sm:w-4/6 flex flex-col justify-between gap-3  ">
                 <div>
