@@ -24,6 +24,11 @@ app.options("*", cors(corsOptions));
 // Enable CORS for all responses
 app.use(cors(corsOptions));
 
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  next();
+});
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
