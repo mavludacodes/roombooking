@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const { pool } = require("../dbconfig");
 const app = express();
-
+app.use(express.json());
 const port = process.env.PORT || 8000;
 
 // app.use(express.static(path.resolve(__dirname, "../client/build")));
