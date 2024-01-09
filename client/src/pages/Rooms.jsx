@@ -1,13 +1,33 @@
-import React from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import RoomImage from "../components/common/Image";
+import NotFoundRooms from "../components/room/NotFoundRooms";
+import Loader from "../components/room/Loader";
+import { getFilteredRooms } from "../fetch/apies";
 
-function Rooms({ rooms }) {
+const Rooms = memo(function Rooms({ searchInput, typeInput, capacityInput }) {
+  const [startLoading, setLoading] = useState(false);
+  const [rooms, setRooms] = useState();
   const navigate = useNavigate();
   const navigateBtn = (e, id) => {
     e.preventDefault();
     navigate(`/rooms/${id}`);
   };
+
+  useEffect(() => {
+    getFilteredRooms(searchInput, typeInput, capacityInput).then((res) => {
+      setRooms(res.results);
+    });
+  }, [searchInput, typeInput, capacityInput]);
+
+  if (rooms?.length == 0) {
+    return (
+      <div className="mt-40 md:mt-28 mb-28 flex justify-center gap-4 flex-col">
+        <NotFoundRooms />;
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="mt-40 md:mt-28 mb-28 flex justify-center gap-4 flex-col">
@@ -46,6 +66,6 @@ function Rooms({ rooms }) {
       </div>
     </>
   );
-}
+});
 
 export default Rooms;

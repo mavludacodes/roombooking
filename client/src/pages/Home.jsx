@@ -1,32 +1,12 @@
-import React, { useState, useEffect } from "react";
-import Rooms from "./Rooms";
-import { getAllRooms, getFilteredRooms } from "../fetch/apies";
+import React, { useState } from "react";
 import Input from "../components/common/Input";
-import NotFoundRooms from "../components/room/NotFoundRooms";
-import Loader from "../components/room/Loader";
+import Rooms from "./Rooms";
+
 export default function Home() {
-  const [rooms, setRooms] = useState();
   const [searchInput, setSearchInput] = useState("");
   const [typeInput, setTypeInput] = useState("");
   const [capacityInput, setCapacityInput] = useState("");
-
-  const [startLoading, setLoading] = useState(false);
-
-  useEffect(() => {
-    getAllRooms().then((res) => {
-      setRooms(res.results);
-    });
-  }, []);
-
-  const searchBtn = (e) => {
-    setLoading(true);
-    getFilteredRooms(searchInput, typeInput, capacityInput).then((res) => {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-      setRooms(res.results);
-    });
-  };
+  const [filters, setFilters] = useState();
 
   return (
     <>
@@ -61,20 +41,20 @@ export default function Home() {
 
           <button
             className="bg-black py-3 text-white text-lg font-medium text-center"
-            onClick={(e) => searchBtn(e)}
+            onClick={(e) =>
+              setFilters({
+                searchInput,
+                typeInput,
+                capacityInput,
+              })
+            }
           >
             Search
           </button>
         </div>
       </div>
 
-      {startLoading ? (
-        <Loader />
-      ) : rooms?.length !== 0 ? (
-        <Rooms rooms={rooms} />
-      ) : (
-        <NotFoundRooms />
-      )}
+      <Rooms {...filters} />
     </>
   );
 }

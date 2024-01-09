@@ -13,7 +13,7 @@ const getAllRooms = async () => {
   }
 };
 
-const getFilteredRooms = async (search, type, capacity) => {
+const getFilteredRooms = async (search = "", type = "", capacity = "") => {
   const req = await fetch(
     `${process.env.REACT_APP_BACKEND_API}/api/rooms?search=${search}&type=${type}&capacity=${capacity}`,
     {
