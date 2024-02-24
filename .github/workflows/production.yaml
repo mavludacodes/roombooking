@@ -23,12 +23,9 @@ jobs:
         run: cd client 
         
       - name: Install
-        run: npm install 
+        run: npm install && npm run build
         
-      - name: Build 
-        run: npm run build
-
-    - name: Publish
+      - name: Publish
         uses: nwtgck/actions-netlify@v2.0
         with:
            publish-dir: './build'
