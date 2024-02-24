@@ -10,7 +10,7 @@ jobs:
   build-publish:
     runs-on: ubuntu-latest
 
-  steps:
+    steps:
       - uses: actions/checkout@v1
 
       - name: Use Node.js 18.x
