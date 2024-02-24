@@ -17,10 +17,15 @@ jobs:
         uses: actions/setup-node@v2
         with:
              node-version: '18.x'
-          
+                
+      - name: Install
+        run: npm install 
+        working-directory: ./client   
+      
       - name: Build 
         run: npm run build
-
+        working-directory: ./client
+      
       - name: Publish
         uses: nwtgck/actions-netlify@v2.0
         with:
