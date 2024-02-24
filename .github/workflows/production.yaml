@@ -17,18 +17,14 @@ jobs:
         uses: actions/setup-node@v2
         with:
              node-version: '18.x'
-     
-    
-      - name: Change Directory
-        run: cd client 
-        
-      - name: Install
-        run: npm install && npm run build
-        
+          
+      - name: Build 
+        run: npm run build
+
       - name: Publish
         uses: nwtgck/actions-netlify@v2.0
         with:
-           publish-dir: './build'
+           publish-dir: './client/build'
            production-deploy: true
            github-token: ${{ secrets.GITHUB_TOKEN }}
            deploy-message: "Deploy from GitHub Actions"
