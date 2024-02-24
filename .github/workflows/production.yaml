@@ -19,8 +19,14 @@ jobs:
              node-version: '18.x'
      
     
-      - name: Build
-        run: cd client && npm install && npm run build
+      - name: Change Directory
+        run: cd client 
+        
+      - name: Install
+        run: npm install 
+        
+      - name: Build 
+        run: npm run build
 
       - name: Publish
         uses: nwtgck/actions-netlify@v2.0
